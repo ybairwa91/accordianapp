@@ -1,5 +1,6 @@
 import "./index.css";
 import React from "react";
+import { useState } from "react";
 
 const faqs = [
   {
@@ -26,24 +27,31 @@ export default function App() {
 
 function Accordion() {
   return (
-    <div>
-      {faqs.map((element) => (
-        <AccordionItem
-          item={faqs[faqs.indexOf(element)].title}
-          text={faqs[faqs.indexOf(element)].text}
-          key={faqs.indexOf(element)}
-        />
+    <div className="accordian">
+      {faqs.map((el, i) => (
+        <AccordionItem num={i} title={el.title} text={el.text} key={i} />
       ))}
     </div>
   );
 }
 
-function AccordionItem({ num, item, text }) {
+function AccordionItem({ num, title, text }) {
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
-    <div className="item">
-      {/* <div className="number">{num}</div> */}
-      <p className="text">{item}</p>
-      <p className="icon">{text}</p>
+    <div className={`item ${isOpen ? "nothing" : "open"}`}>
+      <div className="number">{num < 9 ? `0${num + 1}` : num + 1}</div>
+      <p className="title" onClick={() => setIsOpen(!isOpen)}>
+        {title}
+      </p>
+      <p className="icon" onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? "+" : "-"}
+      </p>
+      {isOpen || (
+        <div onClick={() => setIsOpen(!isOpen)} className="content-box">
+          {text}
+        </div>
+      )}
     </div>
   );
 }
